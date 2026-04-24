@@ -93,29 +93,37 @@ app.get('/api/public/portfolio', (req, res) => {
     });
 });
 
-// Public: Get featured photos for Home page (grouped by category)
+// Public: Get featured photos for Home page (grouped by category, unique sessions)
 app.get('/api/public/featured', (req, res) => {
+    // We get all public photos with session info
     const query = `
-        SELECT p.id, p.url, s.category, s.title
+        SELECT p.id, p.url, s.category, s.title, s.id as sessionId
         FROM photos p
         JOIN sessions s ON p.session_id = s.id
         WHERE p.is_public = 1
-        ORDER BY s.created_at DESC
-        LIMIT 12
+        ORDER BY RAND()
     `;
     db.query(query, (err, results) => {
         if (err) return res.status(500).json(err);
         
-        // Group by category
-        const featured = results.reduce((acc, photo) => {
-            if (!acc[photo.category]) acc[photo.category] = [];
-            acc[photo.category].push({
-                id: photo.id,
-                url: photo.url,
-                session: { title: photo.title, category: photo.category }
-            });
-            return acc;
-        }, {});
+        // Group by category, but keep only one photo per session, max 3 per category
+        const featured = {};
+        const usedSessions = new Set();
+        const categoryCounts = {};
+
+        results.forEach(photo => {
+            const cat = photo.category;
+            if (!featured[cat]) featured[cat] = [];
+            
+            if (featured[cat].length < 3 && !usedSessions.has(photo.sessionId)) {
+                featured[cat].push({
+                    id: photo.id,
+                    url: photo.url,
+                    session: { title: photo.title, category: photo.category }
+                });
+                usedSessions.add(photo.sessionId);
+            }
+        });
         
         res.json(featured);
     });

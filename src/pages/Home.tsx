@@ -43,7 +43,7 @@ const Home = () => {
             Capturer <br /> L'Instant.
           </h1>
           <p className="text-zinc-400 max-w-lg mx-auto text-lg mb-12">
-            Photographe professionnel spécialisé dans l'automobile, les portraits et les événements. Une approche sobre et élégante pour vos souvenirs les plus précieux.
+            Photographe spécialisé dans l'automobile, les portraits et les événements. Une approche sobre et élégante pour vos souvenirs les plus précieux.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link to="/portfolio" className="btn-primary">
