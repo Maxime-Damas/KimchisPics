@@ -16,7 +16,10 @@
     "noEmit": true,
     "jsx": "react-jsx",
 
-    /* C'EST ICI QUE TU AJOUTES TES RÈGLES */
+    /* AJOUTE CETTE LIGNE ICI */
+    "types": ["vite/client"],
+
+    /* Garde tes réglages précédents */
     "strict": true,
     "noUnusedLocals": false,
     "noUnusedParameters": false,
