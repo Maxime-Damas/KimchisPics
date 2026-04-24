@@ -69,12 +69,19 @@ const ContactForm = () => {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Simulate API call
-    console.log('Form submitted:', formData);
-    setSubmitted(true);
-    setTimeout(() => setSubmitted(false), 5000);
+    try {
+      const forfaitLabel = forfaits.find(f => f.id.toString() === formData.forfait)?.label || formData.forfait;
+      await api.post('/public/contact', {
+        ...formData,
+        forfait: forfaitLabel
+      });
+      setSubmitted(true);
+      setTimeout(() => setSubmitted(false), 5000);
+    } catch (error) {
+      alert('Une erreur est survenue lors de l\'envoi de votre demande.');
+    }
   };
 
   return (
@@ -112,7 +119,7 @@ const ContactForm = () => {
                       value={formData.prenom}
                       onChange={handleChange}
                       required
-                      placeholder="Jean"
+                      placeholder="Jacks"
                       className="w-full bg-zinc-900/50 border border-zinc-800 p-4 text-zinc-100 focus:outline-none focus:border-zinc-500 transition-colors rounded-none"
                     />
                   </div>
@@ -124,7 +131,7 @@ const ContactForm = () => {
                       value={formData.nom}
                       onChange={handleChange}
                       required
-                      placeholder="Dupont"
+                      placeholder="Jackson"
                       className="w-full bg-zinc-900/50 border border-zinc-800 p-4 text-zinc-100 focus:outline-none focus:border-zinc-500 transition-colors rounded-none"
                     />
                   </div>

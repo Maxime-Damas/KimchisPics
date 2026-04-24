@@ -359,6 +359,35 @@ app.delete('/api/photos/:id', authenticateToken, (req, res) => {
     });
 });
 
+// Public: Submit contact form
+app.post('/api/public/contact', (req, res) => {
+    const { nom, prenom, telephone, forfait, nbPhotos, message } = req.body;
+    const query = 'INSERT INTO contacts (nom, prenom, telephone, forfait, nb_photos, message) VALUES (?, ?, ?, ?, ?, ?)';
+    db.query(query, [nom, prenom, telephone, forfait, nbPhotos, message], (err) => {
+        if (err) {
+            console.error('Error saving contact:', err);
+            return res.status(500).json(err);
+        }
+        res.json({ message: 'Contact request saved successfully' });
+    });
+});
+
+// Admin: Get all contact requests
+app.get('/api/admin/contacts', authenticateToken, (req, res) => {
+    db.query('SELECT * FROM contacts ORDER BY created_at DESC', (err, results) => {
+        if (err) return res.status(500).json(err);
+        res.json(results);
+    });
+});
+
+// Admin: Delete a contact request
+app.delete('/api/admin/contacts/:id', authenticateToken, (req, res) => {
+    db.query('DELETE FROM contacts WHERE id = ?', [req.params.id], (err) => {
+        if (err) return res.status(500).json(err);
+        res.json({ message: 'Contact request deleted' });
+    });
+});
+
 app.listen(PORT, () => {
     console.log(`Kimchi Portfolio Server running on port ${PORT}`);
 });

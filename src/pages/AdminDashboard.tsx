@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../api';
-import { Plus, Trash2, LogOut, Camera, X, Globe, Lock, LayoutGrid, Settings2 } from 'lucide-react';
+import { Plus, Trash2, LogOut, Camera, X, Globe, Lock, LayoutGrid, Settings2, Inbox } from 'lucide-react';
 import AdminForfaits from '../components/AdminForfaits';
+import AdminContacts from '../components/AdminContacts';
 
 interface Session {
   id: number;
@@ -14,7 +15,7 @@ interface Session {
 }
 
 const AdminDashboard = () => {
-  const [activeTab, setActiveTab] = useState<'sessions' | 'forfaits'>('sessions');
+  const [activeTab, setActiveTab] = useState<'sessions' | 'forfaits' | 'contacts'>('sessions');
   const [sessions, setSessions] = useState<Session[]>([]);
   const [forfaits, setForfaits] = useState<{id: number, label: string}[]>([]);
   const [loading, setLoading] = useState(true);
@@ -144,6 +145,12 @@ const AdminDashboard = () => {
         >
           <Settings2 className="w-4 h-4" /> Forfaits & Prix
         </button>
+        <button 
+          onClick={() => setActiveTab('contacts')}
+          className={`pb-4 px-2 flex items-center gap-2 uppercase tracking-widest text-xs font-bold transition-all ${activeTab === 'contacts' ? 'border-b-2 border-zinc-100 text-zinc-100' : 'text-zinc-500 hover:text-zinc-300'}`}
+        >
+          <Inbox className="w-4 h-4" /> Messages
+        </button>
       </div>
 
       {activeTab === 'sessions' ? (
@@ -210,8 +217,10 @@ const AdminDashboard = () => {
             </div>
           )}
         </>
-      ) : (
+      ) : activeTab === 'forfaits' ? (
         <AdminForfaits />
+      ) : (
+        <AdminContacts />
       )}
 
       {/* Modal Création */}
