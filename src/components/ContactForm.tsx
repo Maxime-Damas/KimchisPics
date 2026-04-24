@@ -19,7 +19,6 @@ const ContactForm = () => {
     nbPhotos: '10',
     message: '',
   });
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchForfaits = async () => {
@@ -31,8 +30,6 @@ const ContactForm = () => {
         }
       } catch (error) {
         console.error('Error fetching forfaits:', error);
-      } finally {
-        setLoading(false);
       }
     };
     fetchForfaits();
