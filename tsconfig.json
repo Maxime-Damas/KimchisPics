@@ -5,11 +5,3 @@
     { "path": "./tsconfig.node.json" }
   ]
 }
-
-{
-  "compilerOptions": {
-    "noUnusedLocals": false,
-    "noUnusedParameters": false,
-    "ignoreDeprecations": "5.0"
-  }
-}
